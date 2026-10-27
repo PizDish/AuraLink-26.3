@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "auralink",
+  "version": "${version}",
+  "name": "AuraLink",
+  "description": "Local Minecraft music library and Yandex Music browser companion controls. Open-source client-only mod.",
+  "authors": [
+    "AuraLink Community"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.auralink.client.AuraLinkClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "icon": "assets/auralink/icon.png"
+}

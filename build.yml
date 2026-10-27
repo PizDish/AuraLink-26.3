@@ -1,0 +1,42 @@
+name: Build AuraLink for Minecraft 26.3
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.7.1'
+      - name: Reject missing sources
+        run: |
+          test -f src/client/java/dev/auralink/client/AuraLinkClient.java
+          test -f src/main/resources/fabric.mod.json
+          test -f companion-extension/manifest.json
+      - name: Build from real Fabric API and Minecraft dependencies
+        run: gradle clean build --no-daemon --stacktrace
+      - name: Check jar class and mod metadata
+        run: |
+          set -e
+          JAR=$(find build/libs -maxdepth 1 -name 'auralink-fabric-26.3-*.jar' ! -name '*sources*' ! -name '*dev*' | head -n 1)
+          test -n "$JAR"
+          unzip -l "$JAR" | grep -F 'dev/auralink/client/AuraLinkClient.class'
+          unzip -l "$JAR" | grep -F 'fabric.mod.json'
+          echo "Artifact: $JAR"
+      - name: Upload installable JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: AuraLink-26.3-JAR
+          path: |
+            build/libs/*.jar
+            !build/libs/*sources*.jar
+            !build/libs/*dev*.jar

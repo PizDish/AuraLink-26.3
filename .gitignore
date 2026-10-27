@@ -1,0 +1,12 @@
+.gradle/
+build/
+.idea/
+*.iml
+*.class
+__pycache__/
+*.pyc
+*.log
+*.jar
+# Never commit generated private pair codes or local music.
+config/auralink-pairing.properties
+auralink/tracks/
